@@ -7,7 +7,6 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;1,400&display=swap"
       rel="stylesheet"
     />
-
     <link rel="stylesheet" href="./styles.css" />
     <link
       rel="icon"
@@ -23,7 +22,6 @@
       <div id="side-logo-div">
         <img id="logo" src="./assets/logo-light.svg" alt="logo-light" />
       </div>
-
       <div class="boards-nav-links-div" id="boards-nav-links-div">
         <h4 id="headline-sidepanel">ALL BOARDS (1)</h4>
         <button class="board-btn">Launch Career</button>
@@ -49,38 +47,54 @@
           <div class="column-div" data-status="todo">
             <div id="todo-head-div" class="column-head-div">
               <span class="dot" id="todo-dot"></span>
-              <h4 id="toDoText" class="columnHeader">TODO (4)</h4>
+              <h4 class="columnHeader">TODO</h4>
             </div>
-            <div class="tasks-container">
-              <div class="task-div">Launch Epic Career 🚀</div>
-              <div class="task-div">Conquer React⚛️</div>
-              <div class="task-div">Understand Databases⚙️</div>
-              <div class="task-div">Crush Frameworks🖼️</div>
-            </div>
+            <div class="tasks-container"></div>
           </div>
           <div class="column-div" data-status="doing">
             <div id="doing-head-div" class="column-head-div">
               <span class="dot" id="doing-dot"></span>
-              <h4 id="doingText" class="columnHeader">DOING (2)</h4>
+              <h4 class="columnHeader">DOING</h4>
             </div>
-            <div class="tasks-container">
-              <div class="task-div">Master JavaScript 💛</div>
-              <div class="task-div">Never Give Up 🏆</div>
-            </div>
+            <div class="tasks-container"></div>
           </div>
           <div class="column-div" data-status="done">
             <div id="done-head-div" class="column-head-div">
               <span class="dot" id="done-dot"></span>
-              <h4 id="doneText" class="columnHeader">DONE (2)</h4>
+              <h4 class="columnHeader">DONE</h4>
             </div>
-            <div class="tasks-container">
-              <div class="task-div">Explore ES6 Features 🚀</div>
-              <div class="task-div">Have fun 🥳</div>
-            </div>
+            <div class="tasks-container"></div>
           </div>
         </main>
       </div>
     </div>
-    <script type="module" src="./scripts.js"></script>
+
+    <div id="modal-container" class="hidden">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3 id="modal-title-header">Edit Task</h3>
+          <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+        </div>
+        <div class="modal-input-group">
+          <label for="modal-task-title" class="modal-label">Title</label>
+          <input type="text" id="modal-task-title" class="modal-input" />
+        </div>
+        <div class="modal-input-group">
+          <label for="modal-task-description" class="modal-label">Description</label>
+          <textarea id="modal-task-description" class="modal-textarea" rows="4"></textarea>
+        </div>
+        <div class="modal-input-group">
+          <label for="modal-status-select" class="modal-label">Status</label>
+          <select id="modal-status-select" class="modal-select">
+            <option value="todo">To Do</option>
+            <option value="doing">Doing</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <button id="save-task-btn" class="modal-save-btn">Save Changes</button>
+      </div>
+    </div>
+
+    <script src="./scripts.js"></script>
   </body>
 </html>
