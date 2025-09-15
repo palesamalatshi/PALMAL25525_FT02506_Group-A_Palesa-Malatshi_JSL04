@@ -1,40 +1,55 @@
-# JSL04 Project Brief: Dynamic Task Display & Modal View
+# Kanban Task Management Board
 
-## Overview
+## Project Description
 
-In this project, you will dynamically display tasks from the **given initial data** on the DOM using JavaScript. Tasks should be placed into the correct **Kanban board columns** based on their status, and clicking a task should open a **modal** where users can view and modify task details. The project emphasizes **DOM manipulation, event handling, modular JavaScript structure, and responsive UI implementation.**
+This is a dynamic, single-page Kanban board application created for the JSL04 challenge. The project allows users to visualize and manage their tasks in a clear, organized "To Do," "Doing," and "Done" layout. The application is built with vanilla JavaScript, emphasizing clean code, modular functions, and a responsive, user-friendly interface. A key feature is the interactive modal, which allows for viewing and editing task details on the fly.
 
-## Before You Begin
+---
 
-**Check the project user stories in your student dashboard and the updated Figma Design** before you start building.
+## Features ✨
 
-## Figma Design Link
+* **Dynamic Task Rendering:** Tasks are loaded and displayed on the board dynamically from a JavaScript data source, with no hardcoded content in the HTML.
+* **Column Organization:** Tasks are automatically placed into the correct column based on their status.
+* **Interactive Modal:** Clicking a task opens a detailed view where users can:
+    * Edit the task title.
+    * Modify the task description.
+    * Update the task's current status via a dropdown menu.
+* **State Management:** Saving changes in the modal updates the application's state and re-renders the board, moving tasks to their new columns instantly.
+* **Responsive Design:** The layout is fully responsive and provides a seamless experience on desktop, tablet, and mobile devices.
 
-Check the updated Figma Design: [Figma Link](https://www.figma.com/design/y7bFCUYL5ZHfPeojACBXg2/Challenges-%7C-JSL?node-id=0-1&p=f&t=Ki0CZk0RAjrk9Fhs-0)
+---
 
-## Key Objectives
+## Technologies Used 💻
 
-### Dynamic Task Display & Interaction
+* **HTML5:** For the core structure and content.
+* **CSS3:** For all styling, including Flexbox, Grid, CSS Variables, and media queries for responsiveness.
+* **JavaScript (ES6+):** For all dynamic functionality, DOM manipulation, and event handling.
 
-- Dynamically generate **task elements** from the given initial data and insert them into the DOM.
-- Ensure tasks are placed in the **correct columns** ("To Do", "In Progress", "Done") based on their status.
-- Clicking a task should **open a modal** displaying its details.
-- The modal should include:
-  - **Editable input fields** for the task title and description.
-  - **A select dropdown** showing the current status with other status options available.
-  - **A close button** that allows users to exit the modal easily.
+---
 
-### Design & Responsiveness
+## Setup and Usage 🚀
 
-- Ensure the **modal matches the Figma design**, including a **backdrop effect** for focus.
-- Implement a **fully responsive modal** that works on both desktop and mobile devices.
+1.  **Clone the Repository:**
+    ```bash
+    git clone <your-repository-url>
+    ```
+2.  **Navigate to the Directory:**
+    ```bash
+    cd <repository-folder-name>
+    ```
+3.  **Open in Browser:**
+    * Simply open the `index.html` file in your favorite web browser (like Chrome, Firefox, or Edge).
 
-### Code Structure & Maintainability
+---
 
-- Structure JavaScript using **modular, single-responsibility functions**.
-- Use **descriptive and meaningful variable and function names** for clarity.
-- Add **JSDoc comments** to major functions, describing their purpose, parameters, and return values for better documentation.
+## How to Interact with the Board
 
-## Expected Outcome
+* **View Task Details:** Click on any task card to open the modal and see its full title and description.
+* **Edit a Task:** Inside the modal, change the text in the title or description fields, or select a new status from the dropdown.
+* **Save Changes:** Click the "Save Changes" button to update the task. The modal will close, and you'll see your changes reflected on the board immediately.
 
-A fully functional **dynamic task board** where tasks appear under the correct columns, and users can **open a modal to view/edit** task details. The project will follow **clean, well-documented, and maintainable code practices**, ensuring a professional and scalable implementation.
+---
+
+## Author
+
+**Palesa Malatshi**

@@ -1,119 +1,156 @@
-import { initialTasks } from './initialData.js';
-
-// Global variables for DOM elements.
-// These variables correctly reference the elements in your HTML.
-const modalContainer = document.querySelector('.modal-container');
-const closeModalBtn = document.getElementById('close-modal-btn');
-const addTaskBtn = document.getElementById('add-task-btn');
-const todoColumn = document.querySelector('[data-status="todo"] .tasks-container');
-const doingColumn = document.querySelector('[data-status="doing"] .tasks-container');
-const doneColumn = document.querySelector('[data-status="done"] .tasks-container');
-
-// A copy of the initial data to be mutated
-let tasks = [...initialTasks];
+// --------------------------------------------------------------------------------
+// JSL04: Dynamic Task Display & Modal View
+// Palesa Malatshi
+// --------------------------------------------------------------------------------
 
 /**
- * Renders tasks onto the Kanban board columns from an array of task objects.
- * This is the function that populates your board with tasks from initialData.js.
- * @param {Array<Object>} tasks - The array of task objects to be rendered.
+ * An array of task objects that represents the initial state of the Kanban board.
+ * @type {Array<{id: number, title: string, description: string, status: string}>}
  */
-function renderTasks(tasks) {
-  // Clear existing tasks from the DOM
-  todoColumn.innerHTML = '';
-  doingColumn.innerHTML = '';
-  doneColumn.innerHTML = '';
+const initialTasks = [
+  {
+    id: 1,
+    title: "Launch Epic Career 🚀",
+    description: "Create a killer Resume",
+    status: "todo",
+  },
+  {
+    id: 2,
+    title: "Master JavaScript 💛",
+    description: "Get comfortable with the fundamentals",
+    status: "doing",
+  },
+  {
+    id: 3,
+    title: "Keep on Going 🏆",
+    description: "You're almost there",
+    status: "doing",
+  },
+  {
+    id: 11,
+    title: "Learn Data Structures and Algorithms 📚",
+    description: "Study fundamental data structures and algorithms...",
+    status: "todo",
+  },
+  {
+    id: 12,
+    title: "Contribute to Open Source Projects 🌐",
+    description: "Gain practical experience and collaborate with others...",
+    status: "done",
+  },
+  {
+    id: 13,
+    title: "Build Portfolio Projects 🛠️",
+    description: "Create a portfolio showcasing your skills...",
+    status: "done",
+  },
+];
 
-  tasks.forEach(task => {
-    const taskElement = createTaskElement(task);
-    if (task.status === 'todo') {
-      todoColumn.appendChild(taskElement);
-    } else if (task.status === 'doing') {
-      doingColumn.appendChild(taskElement);
-    } else if (task.status === 'done') {
-      doneColumn.appendChild(taskElement);
-    }
-  });
+const state = {
+  tasks: initialTasks,
+  currentTaskId: null,
+};
 
-  updateTaskCounts(tasks);
-}
+// DOM Element Selectors
+const columns = {
+  todo: document.querySelector('.column-div[data-status="todo"] .tasks-container'),
+  doing: document.querySelector('.column-div[data-status="doing"] .tasks-container'),
+  done: document.querySelector('.column-div[data-status="done"] .tasks-container'),
+};
+const columnHeaders = {
+    todo: document.querySelector('#todo-head-div .columnHeader'),
+    doing: document.querySelector('#doing-head-div .columnHeader'),
+    done: document.querySelector('#done-head-div .columnHeader'),
+};
+const modalContainer = document.getElementById("modal-container");
+const modalTaskTitleInput = document.getElementById("modal-task-title");
+const modalTaskDescriptionInput = document.getElementById("modal-task-description");
+const modalStatusSelect = document.getElementById("modal-status-select");
+const closeModalBtn = document.getElementById("close-modal-btn");
+const saveTaskBtn = document.getElementById("save-task-btn");
 
 /**
- * Creates an HTML element for a given task object.
- * Each task is an interactive component thanks to this function.
- * @param {Object} task - The task object containing id, title, description, and status.
- * @returns {HTMLElement} The created task element.
+ * Creates an HTML element for a single task.
+ * @param {object} task - The task object.
+ * @returns {HTMLElement} The created task div element.
  */
-function createTaskElement(task) {
-  const taskDiv = document.createElement('div');
-  taskDiv.className = 'task-div';
+const createTaskElement = (task) => {
+  const taskDiv = document.createElement("div");
+  taskDiv.className = "task-div";
   taskDiv.textContent = task.title;
-
-  taskDiv.addEventListener('click', () => {
-    displayModal(task);
-  });
+  taskDiv.setAttribute("data-task-id", task.id);
+  taskDiv.addEventListener("click", () => openModal(task.id));
   return taskDiv;
-}
+};
 
 /**
- * Displays the modal with the details of the clicked task.
- * This function handles populating the modal with the correct data and making it visible with a backdrop.
- * @param {Object} task - The task object to display in the modal.
+ * Renders all tasks from the state to their respective columns in the DOM.
  */
-function displayModal(task) {
-  const modalTitle = document.getElementById('modal-task-title');
-  const modalDescription = document.getElementById('modal-task-description');
-  const modalStatus = document.getElementById('modal-status-select');
+const renderTasks = () => {
+  // Clear existing tasks
+  columns.todo.innerHTML = "";
+  columns.doing.innerHTML = "";
+  columns.done.innerHTML = "";
+  
+  const taskCounts = { todo: 0, doing: 0, done: 0 };
 
-  modalTitle.textContent = task.title;
-  modalDescription.textContent = task.description;
-  modalStatus.value = task.status;
-
-  modalContainer.classList.remove('hidden');
-}
-
-/**
- * Closes the task details modal, giving users a seamless exit.
- */
-function closeModal() {
-  modalContainer.classList.add('hidden');
-}
-
-/**
- * Updates the task count in each column header to reflect the current number of tasks.
- * This keeps the UI accurate and in sync with the data.
- * @param {Array<Object>} tasks - The array of task objects.
- */
-function updateTaskCounts(tasks) {
-  const todoCount = tasks.filter(task => task.status === 'todo').length;
-  const doingCount = tasks.filter(task => task.status === 'doing').length;
-  const doneCount = tasks.filter(task => task.status === 'done').length;
-
-  document.getElementById('toDoText').textContent = `TODO (${todoCount})`;
-  document.getElementById('doingText').textContent = `DOING (${doingCount})`;
-  document.getElementById('doneText').textContent = `DONE (${doneCount})`;
-}
-
-// Event listeners for user interaction
-// These are the listeners that make the buttons work.
-closeModalBtn.addEventListener('click', closeModal);
-modalContainer.addEventListener('click', (event) => {
-  if (event.target === modalContainer) {
-    closeModal();
+  // Render each task
+  for (const task of state.tasks) {
+    const taskElement = createTaskElement(task);
+    columns[task.status].appendChild(taskElement);
+    taskCounts[task.status]++;
   }
+  
+  // Update column headers with counts
+  columnHeaders.todo.textContent = `TODO (${taskCounts.todo})`;
+  columnHeaders.doing.textContent = `DOING (${taskCounts.doing})`;
+  columnHeaders.done.textContent = `DONE (${taskCounts.done})`;
+};
+
+/**
+ * Opens the modal and populates it with data for a given task ID.
+ * @param {number} taskId - The ID of the task to be displayed in the modal.
+ */
+const openModal = (taskId) => {
+  state.currentTaskId = taskId;
+  const task = state.tasks.find((t) => t.id === taskId);
+
+  if (task) {
+    modalTaskTitleInput.value = task.title;
+    modalTaskDescriptionInput.value = task.description;
+    modalStatusSelect.value = task.status;
+    modalContainer.classList.remove("hidden");
+  }
+};
+
+/**
+ * Closes the modal.
+ */
+const closeModal = () => {
+  modalContainer.classList.add("hidden");
+};
+
+/**
+ * Saves the changes from the modal to the task in the state and re-renders the board.
+ */
+const saveTask = () => {
+  const task = state.tasks.find((t) => t.id === state.currentTaskId);
+
+  if (task) {
+    task.title = modalTaskTitleInput.value.trim();
+    task.description = modalTaskDescriptionInput.value.trim();
+    task.status = modalStatusSelect.value;
+  }
+
+  renderTasks();
+  closeModal();
+};
+
+// Event Listeners
+closeModalBtn.addEventListener("click", closeModal);
+saveTaskBtn.addEventListener("click", saveTask);
+
+// Initial Load
+document.addEventListener("DOMContentLoaded", () => {
+  renderTasks();
 });
-
-addTaskBtn.addEventListener('click', () => {
-  // Clears the modal for a new task entry
-  const modalTitle = document.getElementById('modal-task-title');
-  const modalDescription = document.getElementById('modal-task-description');
-  const modalStatus = document.getElementById('modal-status-select');
-
-  modalTitle.textContent = 'New Task Title';
-  modalDescription.textContent = 'Enter description here';
-  modalStatus.value = 'todo';
-
-  modalContainer.classList.remove('hidden');
-});
-
-// Initial call to render tasks on page load.
-renderTasks(tasks);
